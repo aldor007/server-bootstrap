@@ -7,6 +7,7 @@ apt-get install openvpn -y
 
 scp -P ${SSH_PORT} ${USER}@${VPN_SERVER}://etc/openvpn/easy-rsa/keys/${HOST}* /etc/openvpn/
 scp -P ${SSH_PORT} ${USER}@${VPN_SERVER}://etc/openvpn/easy-rsa/keys/ca.crt  /etc/openvpn/
+rm -rf /etc/openvpn/client.conf
 cat <<EOF > /etc/openvpn/client.conf
 client
 dev tun0
@@ -34,12 +35,12 @@ echo "Do you are bootstraping minion? (yes or no)"
 read saltType
 
 if [[ "$saltType" -eq "yes" ]]; then
-    ./minions.sh
+    bash ./minions.sh
 else 
-    ./master.sh
+    bash ./master.sh
 fi
 
-
+echo ${HOST} > /etc/salt/minion_id
 echo "Type machine segment"
 read segment
 
